@@ -1,1 +1,356 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bombwine</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  .site {
+    --black: #111110;
+    --white: #ffffff;
+    --off-white: #f8f6f2;
+    --yellow: #f0d43a;
+    --light-gray: #e8e4de;
+    --mid-gray: #999490;
+    --border: #dedad4;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: var(--black);
+    background: var(--white);
+    line-height: 1.4;
+    width: 1440px;
+  }
+
+  .top-bar {
+    background: var(--black);
+    color: #fff;
+    text-align: center;
+    padding: 8px 16px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 52px;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+  }
+  .nav-links { list-style: none; display: flex; gap: 20px; }
+  .nav-links a {
+    font-size: 9px; font-weight: 700; letter-spacing: 1.8px;
+    text-transform: uppercase; text-decoration: none; color: var(--black);
+  }
+  .nav-links a.active { border-bottom: 2px solid var(--black); padding-bottom: 1px; }
+  .nav-logo { font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; }
+  .nav-cart { display: flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 460px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-content {
+    padding: 48px 44px 48px 52px;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .hero-visual {
+    background: var(--off-white);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 32px 32px 28px; gap: 16px;
+  }
+  .hero-launch-tag {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--black);
+  }
+  .hero-title {
+    font-family: 'EB Garamond', serif; font-weight: 400;
+    font-size: 48px; line-height: 1.05; letter-spacing: -0.3px; margin-bottom: 5px;
+  }
+  .hero-subtitle {
+    font-family: 'EB Garamond', serif; font-style: italic;
+    font-size: 18px; color: var(--mid-gray); margin-bottom: 6px;
+  }
+  .hero-origin {
+    font-size: 9px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--mid-gray); margin-bottom: 22px;
+  }
+  .hero-meta-row { display: flex; border: 1px solid var(--border); margin-bottom: 22px; }
+  .meta-cell { padding: 10px 14px; border-right: 1px solid var(--border); flex: 1; }
+  .meta-cell:last-child { border-right: none; }
+  .meta-lbl { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 4px; }
+  .meta-val { font-family: 'EB Garamond', serif; font-size: 20px; font-weight: 600; line-height: 1; }
+  .stock-row { display: flex; flex-direction: column; gap: 4px; }
+  .stock-txt { font-size: 10px; font-weight: 700; }
+  .stock-bar { height: 3px; background: var(--light-gray); width: 100%; }
+  .stock-fill { height: 100%; background: var(--black); }
+  .cta-row { display: flex; gap: 8px; }
+  .btn-buy {
+    background: var(--black); color: #fff; border: none;
+    padding: 13px 24px; font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; flex: 1;
+  }
+  .btn-outline {
+    background: transparent; color: var(--black); border: 1px solid var(--border);
+    padding: 13px 18px; font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  .bottle-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .bottle-lbl { font-size: 8px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mid-gray); }
+
+  .countdown {
+    background: var(--black); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    gap: 32px; padding: 18px 52px; flex-wrap: wrap;
+  }
+  .cd-intro { font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid-gray); }
+  .cd-units { display: flex; align-items: center; gap: 2px; }
+  .cd-unit { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+  .cd-num { font-family: 'EB Garamond', serif; font-size: 34px; font-weight: 600; line-height: 1; }
+  .cd-lbl { font-size: 7px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mid-gray); margin-top: 2px; }
+  .cd-sep { font-family: 'EB Garamond', serif; font-size: 28px; color: var(--mid-gray); padding-bottom: 8px; margin: 0 1px; }
+  .cd-email { display: flex; }
+  .cd-input {
+    background: #222; border: 1px solid #333; border-right: none;
+    padding: 9px 12px; font-family: 'Montserrat', sans-serif;
+    font-size: 11px; color: #fff; outline: none; width: 240px;
+  }
+  .cd-input::placeholder { color: #555; }
+  .cd-btn {
+    background: var(--yellow); color: var(--black); border: none;
+    padding: 9px 14px; font-family: 'Montserrat', sans-serif;
+    font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  .section { padding: 48px 52px; }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 28px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .sec-title { font-family: 'EB Garamond', serif; font-size: 26px; font-weight: 400; }
+  .sec-title em { font-style: italic; color: var(--mid-gray); }
+  .sec-link { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; color: var(--black); border-bottom: 1px solid var(--black); padding-bottom: 1px; }
+
+  .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .pcard { background: var(--white); position: relative; display: flex; flex-direction: column; }
+  .pcard-img { background: var(--off-white); display: flex; align-items: flex-end; justify-content: center; position: relative; padding-bottom: 10px; height: 200px; }
+  .pcard-badge { position: absolute; top: 8px; left: 8px; font-size: 8px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 7px; }
+  .badge-limited { background: var(--yellow); color: var(--black); }
+  .badge-sold { background: var(--light-gray); color: var(--mid-gray); }
+  .sold-overlay { position: absolute; inset: 0; background: rgba(255,255,255,.5); display: flex; align-items: center; justify-content: center; }
+  .sold-stamp { font-family: 'EB Garamond', serif; font-size: 13px; font-style: italic; color: var(--mid-gray); border: 1px solid var(--mid-gray); padding: 4px 12px; background: var(--white); }
+  .pcard-body { padding: 12px 12px 8px; flex: 1; }
+  .pcard-region { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 3px; }
+  .pcard-name { font-family: 'EB Garamond', serif; font-size: 18px; font-weight: 400; line-height: 1.2; }
+  .pcard-prod { font-size: 10px; color: var(--mid-gray); margin-top: 2px; }
+  .pcard-footer { padding: 10px 12px 12px; border-top: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: space-between; }
+  .pcard-price-lbl { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mid-gray); }
+  .pcard-price { font-family: 'EB Garamond', serif; font-size: 20px; line-height: 1; }
+  .pcard-price-sub { font-size: 9px; color: var(--mid-gray); margin-top: 1px; }
+  .pcard-stock-num { font-size: 9px; font-weight: 700; text-align: right; }
+  .pcard-sbar { width: 44px; height: 2px; background: var(--light-gray); margin-top: 4px; margin-left: auto; }
+  .pcard-sfill { height: 100%; background: var(--black); }
+
+  .about { background: var(--off-white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; }
+  .about-text { padding: 48px 52px; border-right: 1px solid var(--border); }
+  .about-text h2 { font-family: 'EB Garamond', serif; font-size: 36px; font-weight: 400; line-height: 1.15; margin-bottom: 18px; }
+  .about-text h2 em { font-style: italic; color: var(--mid-gray); }
+  .about-text p { font-size: 12px; line-height: 1.8; color: #666; margin-bottom: 12px; }
+  .about-text p strong { color: var(--black); font-weight: 600; }
+  .about-link { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; color: var(--black); border-bottom: 1px solid var(--black); padding-bottom: 1px; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+  .stat-box { background: var(--white); padding: 28px 24px; }
+  .stat-n { font-family: 'EB Garamond', serif; font-size: 44px; font-weight: 600; line-height: 1; }
+  .stat-l { font-size: 9px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mid-gray); margin-top: 6px; line-height: 1.4; }
+
+  .insta-section { padding: 48px 52px; border-top: 1px solid var(--border); }
+  .insta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin-top: 28px; }
+  .insta-sq { background: var(--off-white); aspect-ratio: 1; }
+  .insta-follow { text-align: center; margin-top: 24px; }
+  .btn-insta { display: inline-block; background: transparent; color: var(--black); border: 1px solid var(--black); padding: 11px 28px; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; }
+
+  footer { background: var(--white); border-top: 1px solid var(--border); padding: 48px 52px 32px; }
+  .footer-top { display: flex; gap: 48px; margin-bottom: 32px; align-items: flex-start; }
+  .logo-circle { width: 80px; height: 80px; border-radius: 50%; background: var(--yellow); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex-shrink: 0; }
+  .logo-t { font-size: 12px; font-weight: 800; letter-spacing: 1.5px; line-height: 1.1; text-transform: uppercase; }
+  .logo-u { font-size: 6.5px; font-weight: 600; color: rgba(17,17,16,.5); letter-spacing: 0.3px; margin-top: 2px; }
+  .footer-col h4 { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+  .footer-col p, .footer-col a { font-size: 11px; color: var(--mid-gray); text-decoration: none; line-height: 1.9; display: block; }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 10px; color: var(--mid-gray); }
+  .footer-legal { display: flex; gap: 20px; }
+  .footer-legal a { font-size: 9px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mid-gray); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="site desktop">
+
+  <div class="top-bar">Inne på ett vinsläpp — Colombaio di Santachiara · Öppen t.o.m. 1 februari 21:00</div>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#">Hem</a></li>
+      <li><a href="#" class="active">Lanseringar</a></li>
+      <li><a href="#">Om oss</a></li>
+      <li><a href="#">Köpvillkor</a></li>
+    </ul>
+    <div class="nav-logo">Bombwine</div>
+    <div class="nav-cart">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+      Korg (0)
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-launch-tag"><span class="live-dot"></span>Pågående lansering</div>
+      <h1 class="hero-title">Colombaio<br>di Santachiara</h1>
+      <p class="hero-subtitle">Familj, höjd och modern tradition i San Gimignano</p>
+      <p class="hero-origin">Toscana · Italien · Limiterad — 12 lådor allokerade</p>
+      <div class="hero-meta-row">
+        <div class="meta-cell"><div class="meta-lbl">Per flaska</div><div class="meta-val">849 kr</div></div>
+        <div class="meta-cell"><div class="meta-lbl">Innehåll / låda</div><div class="meta-val">3 fl</div></div>
+        <div class="meta-cell"><div class="meta-lbl">Kvar i lager</div><div class="stock-row"><span class="stock-txt">3 av 12 lådor</span><div class="stock-bar"><div class="stock-fill" style="width:25%"></div></div></div></div>
+      </div>
+      <div class="cta-row">
+        <button class="btn-buy">Köp nu — 2 547 kr</button>
+        <button class="btn-outline">Läs mer om vinet</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="bottle-wrap">
+        <svg width="52" height="190" viewBox="0 0 60 220" fill="none"><rect x="22" y="0" width="16" height="22" rx="3" fill="#3a3530"/><path d="M19 22C11 38 9 54 9 76L9 190C9 200 16 206 30 206C44 206 51 200 51 190L51 76C51 54 49 38 41 22Z" fill="#2c2520"/><rect x="11" y="90" width="38" height="68" rx="2" fill="#3a2e28"/><text x="30" y="124" font-family="serif" font-size="5.5" fill="#c8bfaf" text-anchor="middle">BACICOLO</text><text x="30" y="135" font-family="serif" font-size="4.5" fill="#8a7a6a" text-anchor="middle">2022</text></svg>
+        <span class="bottle-lbl">Bacicolo</span>
+      </div>
+      <div class="bottle-wrap">
+        <svg width="64" height="210" viewBox="0 0 60 220" fill="none"><rect x="21" y="0" width="18" height="20" rx="3" fill="#4a4030"/><path d="M18 20C10 36 8 52 8 74L8 188C8 198 16 204 30 204C44 204 52 198 52 188L52 74C52 52 50 36 42 20Z" fill="#3a3228"/><rect x="10" y="88" width="40" height="72" rx="2" fill="#463c30"/><text x="30" y="122" font-family="serif" font-size="5" fill="#e0d8c0" text-anchor="middle">COLOMBAIO</text><text x="30" y="134" font-family="serif" font-size="4.5" fill="#e0d8c0" text-anchor="middle">SANTACHIARA</text><text x="30" y="148" font-family="serif" font-size="4" fill="#8a7a6a" text-anchor="middle">2023</text></svg>
+        <span class="bottle-lbl">Vernaccia</span>
+      </div>
+      <div class="bottle-wrap">
+        <svg width="52" height="190" viewBox="0 0 60 220" fill="none"><rect x="22" y="0" width="16" height="22" rx="3" fill="#2a3028"/><path d="M19 22C11 38 9 54 9 76L9 190C9 200 16 206 30 206C44 206 51 200 51 190L51 76C51 54 49 38 41 22Z" fill="#1a2618"/><rect x="11" y="90" width="38" height="68" rx="2" fill="#2e3c2c"/><text x="30" y="124" font-family="serif" font-size="5.5" fill="#90b080" text-anchor="middle">CHIANTI</text><text x="30" y="135" font-family="serif" font-size="4.5" fill="#607860" text-anchor="middle">CLASSICO</text></svg>
+        <span class="bottle-lbl">Chianti Cl.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="countdown">
+    <div class="cd-intro">Lanseringen stänger om:</div>
+    <div class="cd-units">
+      <div class="cd-unit"><span class="cd-num">02</span><span class="cd-lbl">Dagar</span></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit"><span class="cd-num">14</span><span class="cd-lbl">Timmar</span></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit"><span class="cd-num">37</span><span class="cd-lbl">Minuter</span></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit"><span class="cd-num">22</span><span class="cd-lbl">Sekunder</span></div>
+    </div>
+    <div class="cd-email">
+      <input class="cd-input" type="email" placeholder="Notifiera mig om nästa släpp">
+      <button class="cd-btn">Skicka</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-head">
+      <h2 class="sec-title">Tidigare <em>lanseringar</em></h2>
+      <a href="#" class="sec-link">Se alla</a>
+    </div>
+    <div class="product-grid">
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-limited">3 kvar</span>
+          <svg width="48" height="170" viewBox="0 0 60 220" fill="none"><rect x="22" y="0" width="16" height="22" rx="3" fill="#3a3530"/><path d="M19 22C11 38 9 54 9 76L9 190C9 200 16 206 30 206C44 206 51 200 51 190L51 76C51 54 49 38 41 22Z" fill="#2c2520"/><rect x="11" y="90" width="38" height="68" rx="2" fill="#3a2e28"/><text x="30" y="124" font-family="serif" font-size="5.5" fill="#c8bfaf" text-anchor="middle">BACICOLO</text></svg>
+        </div>
+        <div class="pcard-body"><div class="pcard-region">Toscana · Italien</div><div class="pcard-name">Bacicolo 2022</div><div class="pcard-prod">Colombaio di Santachiara</div></div>
+        <div class="pcard-footer"><div><div class="pcard-price-lbl">Per flaska</div><div class="pcard-price">849 kr</div><div class="pcard-price-sub">3 fl/låda · 2 547 kr</div></div><div><div class="pcard-stock-num">3 / 12</div><div class="pcard-sbar"><div class="pcard-sfill" style="width:25%"></div></div></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-sold">Slutsålt</span>
+          <svg width="48" height="170" viewBox="0 0 60 220" fill="none"><rect x="21" y="0" width="18" height="20" rx="3" fill="#1a1430"/><path d="M18 20C10 36 8 52 8 74L8 188C8 198 16 204 30 204C44 204 52 198 52 188L52 74C52 52 50 36 42 20Z" fill="#12102a"/><rect x="10" y="88" width="40" height="68" rx="2" fill="#1e1838"/><text x="30" y="124" font-family="serif" font-size="5" fill="#8080c0" text-anchor="middle">CHAMPAGNE</text></svg>
+          <div class="sold-overlay"><div class="sold-stamp">Slutsålt</div></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-region">Champagne · Frankrike</div><div class="pcard-name">Blanc de Blancs BIO</div><div class="pcard-prod">H. Blin</div></div>
+        <div class="pcard-footer"><div><div class="pcard-price-lbl">Per flaska</div><div class="pcard-price">695 kr</div><div class="pcard-price-sub">3 fl/låda · 2 085 kr</div></div><div><div class="pcard-stock-num" style="color:#999">0 / 15</div><div class="pcard-sbar"><div class="pcard-sfill" style="width:0%"></div></div></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-sold">Slutsålt</span>
+          <svg width="48" height="170" viewBox="0 0 60 220" fill="none"><rect x="22" y="0" width="16" height="22" rx="3" fill="#32280a"/><path d="M19 22C11 38 9 54 9 76L9 190C9 200 16 206 30 206C44 206 51 200 51 190L51 76C51 54 49 38 41 22Z" fill="#28200a"/><rect x="11" y="90" width="38" height="68" rx="2" fill="#3a3010"/><text x="30" y="124" font-family="serif" font-size="5.5" fill="#c0a040" text-anchor="middle">BOURGUEIL</text></svg>
+          <div class="sold-overlay"><div class="sold-stamp">Slutsålt</div></div>
+        </div>
+        <div class="pcard-body"><div class="pcard-region">Loire · Frankrike</div><div class="pcard-name">Grand Clos Récolet 2022</div><div class="pcard-prod">Audebert et Fils</div></div>
+        <div class="pcard-footer"><div><div class="pcard-price-lbl">Per flaska</div><div class="pcard-price">445 kr</div><div class="pcard-price-sub">6 fl/låda · 2 670 kr</div></div><div><div class="pcard-stock-num" style="color:#999">0 / 12</div><div class="pcard-sbar"><div class="pcard-sfill" style="width:0%"></div></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about">
+    <div class="about-text">
+      <h2>Krogvin direkt<br>till din dörr.<br><em>Enkelt och ärligt.</em></h2>
+      <p>Vi gör kontinuerliga vinsläpp från producenter som tidigare bara landat på <strong>bättre krogar i Europa</strong>. Direkt från de som gör vinet till de som dricker det.</p>
+      <p>Vi är ett initiativ sprunget ur pandemin. Efter tio års arbete med vin och massor av kontakter i Europa hade vi en möjlighet att skicka vinet direkt hem till dörr.</p>
+      <a href="#" class="about-link">Vår historia</a>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box"><div class="stat-n">10+</div><div class="stat-l">År med europeiska producenter</div></div>
+      <div class="stat-box"><div class="stat-n">~20</div><div class="stat-l">Lådor per lansering</div></div>
+      <div class="stat-box"><div class="stat-n">100%</div><div class="stat-l">Moms & skatt i Sverige</div></div>
+      <div class="stat-box"><div class="stat-n">3–5</div><div class="stat-l">Lanseringar per år</div></div>
+    </div>
+  </div>
+
+  <div class="insta-section">
+    <div class="sec-head">
+      <h2 class="sec-title">Följ oss på <em>Instagram</em></h2>
+      <a href="#" class="sec-link">@bombwine.se</a>
+    </div>
+    <div class="insta-grid">
+      <div class="insta-sq"></div>
+      <div class="insta-sq"></div>
+      <div class="insta-sq"></div>
+      <div class="insta-sq"></div>
+    </div>
+    <div class="insta-follow"><a href="#" class="btn-insta">Följ på Instagram</a></div>
+  </div>
+
+  <footer>
+    <div class="footer-top">
+      <div class="logo-circle">
+        <div class="logo-t">BOMB<br>WINE.</div>
+        <div class="logo-u">www.bombwine.se</div>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <a href="#">hej@bombwine.se</a>
+        <a href="#">@bombwine.se</a>
+      </div>
+      <div class="footer-col">
+        <h4>Företagsuppgifter</h4>
+        <p>Bombwine ApS</p>
+        <p>c/o Dansk Revision Randers</p>
+        <p>Tronholmen 5 · 8960 Randers SØ</p>
+        <p>CVR: DK42461113</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Bombwine ApS — Åldersgräns 20 år</span>
+      <div class="footer-legal"><a href="#">Köpvillkor</a><a href="#">Om oss</a></div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
